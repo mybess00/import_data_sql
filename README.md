@@ -18,6 +18,7 @@ HOST_DB=
 DB= 
 USER_DB= 
 PASSWORD_DB=
+DB_NAME=
 ```
 
 
