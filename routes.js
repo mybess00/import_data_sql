@@ -6,3 +6,4 @@ export const fileRouter = Router()
 const upload = multer()
 
 fileRouter.post("/excel", upload.single('file'), FileController.processExcel)
+fileRouter.post("/database", upload.none(), FileController.insertDB)

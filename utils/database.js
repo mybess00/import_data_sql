@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import { DataTypes } from 'sequelize';
 
-const { DB, USER_DB, PASSWORD_DB, PORT_DB, HOST_DB } = process.env
+const { DB, USER_DB, PASSWORD_DB, PORT_DB, HOST_DB, DB_NAME } = process.env
 
 const db = new Sequelize(DB, USER_DB, PASSWORD_DB, {
     host: HOST_DB,
@@ -41,19 +41,13 @@ const User = db.define('user', {
         allowNull: false
     }
 }, {
-    tableName: "user",
+    tableName: DB_NAME,
     timestamps: false,
 });
 
 export const insertData = (data) => {
     const promises = data.map(async (row) => {
-        return await User.create({
-            nombre: row.NOMBRE,
-            apellidos: row.APELLIDOS,
-            email: row.MAIL,
-            fecha: new Date((parseInt(row.NACIMIENTO) - 25569) * 86400000),
-            pasaporte: row.DOCUMENTO
-        });
+        return await User.create(row);
     });
     return promises
 }

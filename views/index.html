@@ -3,79 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send XLSX Files</title>
-    <style>
-        body {
-            background-color: #212121;
-            color: white;
-        }
-        nav {
-            width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            min-height: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgb(12, 12, 12);
-        }
-        section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .main-container {
-            background-color: #2f2f2f;
-            margin-top: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid gray;
-            border-radius: 10px;
-            padding: 50px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        .btn-submit {
-            padding: 8px 20px;
-            border-radius: 10px;
-            background: transparent;
-            color: white;
-            border: 1px solid white;
-            transition: all ease 250ms;
-        }
-        .btn-submit:hover {
-            cursor: pointer;
-            border-color: rgb(167, 28, 167);
-            color: rgb(167, 28, 167);
-        }
-        .response-container {
-            min-height: 150px;
-            background-color: #2f2f2f;
-            margin-top: 30px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid gray;
-            border-radius: 10px;
-            padding: 50px;
-        }
-        .error{
-            color: rgb(212, 51, 51);
-        }
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 10px;
-            }
-            .response-container {
-                padding: 10px;
-            }
-        }
-    </style>
+    <title>Import Data to SQL Database</title>
+    <meta name="description" content="Easily import and manage your data in a SQL database. Streamline your workflow with our intuitive interface and enhance your data management capabilities.">
+    <meta name="keywords" content="import data, SQL database, data management, upload data, database management, streamline workflow, intuitive interface, data import tools">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <nav>
@@ -83,43 +14,34 @@
     </nav>
     <section>
         <div class="main-container">
-            <h3>Select a Excel file</h3>
+            <h3>
+                Select a Excel file or
+                <span id="new-consult" class="text-button">New Consult</span>
+            </h3>
             <form id="fileForm" action="/api/file/xlsx" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept=".xlsx, .csv" required />
+                <input type="file" name="file" id="input-file" accept=".xlsx, .csv" required />
                 <button class="btn-submit" type="submit">Submit</button>
+            </form>
+            <form id="bdForm" class="hidden column-container">
+                <h3 class="all-col">Select the corresponding column for each database field.</h3>
+                <label for="bd-nombre">Nombre</label>
+                <select class="select-column" id="bd-nombre" name="nombre" required></select>
+                <label for="bd-apellidos">Apellidos</label>
+                <select class="select-column" id="bd-apellidos" name="apellidos" required></select>
+                <label for="bd-email">Email</label>
+                <select class="select-column" id="bd-email" name="email" required></select>
+                <label for="bd-fecha">Fecha</label>
+                <select class="select-column" id="bd-fecha" name="fecha" required></select>
+                <label for="bd-pasaporte">Pasaporte</label>
+                <select class="select-column" id="bd-pasaporte" name="pasaporte" required></select>
+
+                <button type="submit"  class="btn-submit all-col">Insert on Database</button>
             </form>
         </div>
         <div id="response" class="response-container">
-            Upload a file first to see the data sent
+            <p>Please upload a file and push to see the imported data.</p>
         </div>
     </section>
-    <script>
-        const form = document.getElementById('fileForm');
-        console.log('aqui')
-        const responseCt = document.getElementById('response');
-
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(form);
-            try {
-                const response = await fetch('/api/file/excel', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                console.log(result)
-                if (result.error) {
-                    responseCt.innerHTML = `<p class="error">Ha ocurrido un error</p>`;
-                } else {
-                    const data = result.data;
-                    responseCt.innerHTML = `<p>Data inserted:</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
-                }
-            } catch (error) {
-                console.error(error)
-                responseCt.innerHTML = `<p class="error">Ha ocurrido un error</p>`;
-            }
-        });
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
